@@ -1,0 +1,17 @@
+server:
+  http_listen_port: 9080
+
+clients:
+  - url: http://localhost:3100/loki/api/v1/push
+
+scrape_configs:
+- job_name: aarch64_docker
+  static_configs:
+  - targets: [localhost]
+    labels:
+      job: aarch64_logs
+      __path__: /var/lib/docker/containers/*/*-json.log
+  pipeline_stages:  
+    - drop:
+        expression: ".*(DEBUG|TRACE).*"
+        source: level

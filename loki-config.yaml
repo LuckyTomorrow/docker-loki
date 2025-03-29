@@ -1,0 +1,30 @@
+auth_enabled: false
+server:
+  http_listen_port: 3100
+
+common:
+  storage:
+    filesystem:
+      chunks_directory: /loki/data
+      rules_directory: /loki/rules
+  replication_factor: 1
+
+schema_config:
+  configs:
+    - from: 2025-03-01
+      store: boltdb-shipper
+      object_store: filesystem
+      schema: v12
+      index:
+        prefix: index_
+        period: 24h
+
+storage_config:
+  boltdb_shipper:
+    active_index_directory: /loki/index
+  filesystem:
+    directory: /loki/data
+
+limits_config:
+  retention_period: 120h  
+  max_query_parallelism: 2  
